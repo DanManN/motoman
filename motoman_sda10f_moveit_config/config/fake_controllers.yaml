@@ -1,6 +1,8 @@
 controller_list:
   - name: fake_arm_left_controller
+    type: $(arg fake_execution_type)
     joints:
+      - torso_joint_b1
       - arm_left_joint_1_s
       - arm_left_joint_2_l
       - arm_left_joint_3_e
@@ -9,7 +11,9 @@ controller_list:
       - arm_left_joint_6_b
       - arm_left_joint_7_t
   - name: fake_arm_right_controller
+    type: $(arg fake_execution_type)
     joints:
+      - torso_joint_b1
       - arm_right_joint_1_s
       - arm_right_joint_2_l
       - arm_right_joint_3_e
@@ -17,26 +21,8 @@ controller_list:
       - arm_right_joint_5_r
       - arm_right_joint_6_b
       - arm_right_joint_7_t
-  - name: fake_torso_controller
-    joints:
-      - torso_joint_b1
   - name: fake_arms_controller
-    joints:
-      - arm_left_joint_1_s
-      - arm_left_joint_2_l
-      - arm_left_joint_3_e
-      - arm_left_joint_4_u
-      - arm_left_joint_5_r
-      - arm_left_joint_6_b
-      - arm_left_joint_7_t
-      - arm_right_joint_1_s
-      - arm_right_joint_2_l
-      - arm_right_joint_3_e
-      - arm_right_joint_4_u
-      - arm_right_joint_5_r
-      - arm_right_joint_6_b
-      - arm_right_joint_7_t
-  - name: fake_sda10f_controller
+    type: $(arg fake_execution_type)
     joints:
       - torso_joint_b1
       - arm_left_joint_1_s
@@ -53,3 +39,8 @@ controller_list:
       - arm_right_joint_5_r
       - arm_right_joint_6_b
       - arm_right_joint_7_t
+initial:  # Define initial robot poses per group
+#  - group: arm_left
+#    pose: home
+
+  []

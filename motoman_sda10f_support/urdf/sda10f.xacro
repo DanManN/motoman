@@ -2,6 +2,23 @@
 
 <robot name="motoman_sda10f" xmlns:xacro="http://ros.org/wiki/xacro">
 	<xacro:include filename="$(find motoman_sda10f_support)/urdf/sda10f_macro.xacro" />
+	<xacro:include filename="$(find robotiq_2f_85_gripper_visualization)/urdf/robotiq_arg2f_85_model_macro.xacro" />
+
 	<xacro:motoman_sda10f prefix=""/>
+	<xacro:robotiq_arg2f_85 prefix="" />
+
+	<joint name="motoman_right_joint_pre_ee" type="fixed">
+		<parent link="arm_right_link_tool0"/>
+		<child link="robotiq_arg2f_base_link"/>
+		<origin xyz="0 0 0" rpy="0 0 0" />
+	</joint>
+
+	<joint name="motoman_right_joint_ee" type="fixed">
+		<parent link="robotiq_arg2f_base_link"/>
+		<child link="motoman_right_ee"/>
+		<origin rpy="0 0 0" xyz="0 0 0.135"/>
+	</joint>
+	<link name="motoman_right_ee"></link>
+
 </robot>
 
