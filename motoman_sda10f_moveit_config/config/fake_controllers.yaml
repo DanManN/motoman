@@ -39,6 +39,10 @@ controller_list:
       - arm_right_joint_5_r
       - arm_right_joint_6_b
       - arm_right_joint_7_t
+  - name: fake_robotiq_gripper_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - finger_joint
 initial:  # Define initial robot poses per group
 #  - group: arm_left
 #    pose: home

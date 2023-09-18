@@ -20,6 +20,7 @@
         <joint name="arm_left_joint_7_t"/>
     </group>
     <group name="arm_right">
+        <link name="motoman_right_ee"/>
         <joint name="torso_joint_b1"/>
         <joint name="arm_right_joint_1_s"/>
         <joint name="arm_right_joint_2_l"/>
@@ -46,8 +47,12 @@
         <joint name="arm_right_joint_6_b"/>
         <joint name="arm_right_joint_7_t"/>
     </group>
+    <group name="robotiq_gripper">
+        <link name="motoman_right_ee"/>
+        <joint name="finger_joint"/>
+    </group>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
-    <end_effector name="ee_right" parent_link="arm_right_link_tool0" group="arm_right"/>
+    <end_effector name="robotiq_gripper" parent_link="motoman_right_ee" group="robotiq_gripper" parent_group="arm_right"/>
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
     <virtual_joint name="FixedBase" type="fixed" parent_frame="world" child_link="base_link"/>
     <!--PASSIVE JOINT: Purpose: this element is used to mark joints that are not actuated-->

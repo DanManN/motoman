@@ -40,7 +40,7 @@ Visualization Manager:
       Name: MotionPlanning
       Planned Path:
         Links: ~
-        Loop Animation: true
+        Loop Animation: false
         Robot Alpha: 0.5
         Show Robot Collision: false
         Show Robot Visual: true
