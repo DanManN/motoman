@@ -10,7 +10,7 @@
 	<joint name="motoman_right_joint_pre_ee" type="fixed">
 		<parent link="arm_right_link_tool0"/>
 		<child link="robotiq_arg2f_base_link"/>
-		<origin xyz="0 0 0" rpy="0 0 0" />
+		<origin xyz="0 0 0" rpy="0 0 1.5708" />
 	</joint>
 
 	<joint name="motoman_right_joint_ee" type="fixed">
@@ -19,6 +19,13 @@
 		<origin rpy="0 0 0" xyz="0 0 0.135"/>
 	</joint>
 	<link name="motoman_right_ee"></link>
+
+	<joint name="motoman_left_joint_ee" type="fixed">
+		<parent link="arm_left_link_tool0" />
+		<child link="motoman_left_ee" />
+		<origin rpy="0 0 0" xyz="0 0 0" />
+	</joint>
+	<link name="motoman_left_ee" />
 
 </robot>
 
