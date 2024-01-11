@@ -27,5 +27,51 @@
 	</joint>
 	<link name="motoman_left_ee" />
 
+	<link name="camera_torso_link" >
+		<visual>
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<geometry>
+				<cylinder radius="0.08" length="0.12"/>
+			</geometry>
+			<material name="">
+				<color rgba="0.9 0.1 0.9 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<geometry>
+				<cylinder radius="0.08" length="0.12"/>
+			</geometry>
+		</collision>
+	</link>
+	<joint name="camera_torso_joint" type="fixed">
+		<parent link="torso_link_b1" />
+		<child link="camera_torso_link" />
+		<origin rpy="0 0 0" xyz="0.1 0.0 0.2" />
+	</joint>
+
+	<link name="camera_arm_link" >
+		<visual>
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<geometry>
+				<box size="0.1 0.15 0.1" />
+			</geometry>
+			<material name="">
+				<color rgba="0.9 0.1 0.9 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<geometry>
+				<box size="0.1 0.15 0.1" />
+			</geometry>
+		</collision>
+	</link>
+	<joint name="camera_arm_joint" type="fixed">
+		<parent link="arm_right_link_6_b" />
+		<child link="camera_arm_link" />
+		<origin rpy="0 0 0" xyz="0 0.03 0.125" />
+	</joint>
+
 </robot>
 
