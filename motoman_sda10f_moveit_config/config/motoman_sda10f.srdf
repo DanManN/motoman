@@ -127,7 +127,6 @@
     <disable_collisions link1="torso_link_b1" link2="torso_link_b2" reason="Default"/>
     <disable_collisions link1="arm_right_link_6_b" link2="robotiq_arg2f_base_link" reason="User"/>
     <disable_collisions link1="arm_right_link_7_t" link2="robotiq_arg2f_base_link" reason="User"/>
-    <disable_collisions link1="arm_right_link_7_t" link2="left_outer_knuckle" reason="User"/>
     <disable_collisions link1="left_outer_knuckle" link2="robotiq_arg2f_base_link" reason="User"/>
     <disable_collisions link1="left_outer_finger" link2="robotiq_arg2f_base_link" reason="User"/>
     <disable_collisions link1="left_inner_finger_pad" link2="robotiq_arg2f_base_link" reason="User"/>
@@ -184,4 +183,7 @@
     <disable_collisions link1="right_inner_finger_pad" link2="right_outer_finger" reason="User"/>
     <disable_collisions link1="right_inner_finger" link2="right_inner_finger_pad" reason="User"/>
     <disable_collisions link1="torso_base_link" link2="torso_link_b1" reason="User"/>
+    <disable_collisions link1="arm_right_link_7_t" link2="robotiq_arg2f_extra_link" reason="User"/>
+    <disable_collisions link1="arm_right_link_6_b" link2="robotiq_arg2f_extra_link" reason="User"/>
+    <disable_collisions link1="robotiq_arg2f_base_link" link2="robotiq_arg2f_extra_link" reason="User"/>
 </robot>
