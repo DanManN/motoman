@@ -7,10 +7,34 @@
 	<xacro:motoman_sda10f prefix=""/>
 	<xacro:robotiq_arg2f_85 prefix="" />
 
+	<link name="robotiq_arg2f_extra_link" >
+		<visual>
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<geometry>
+				<cylinder radius="0.04" length="0.017"/>
+			</geometry>
+			<material name="">
+				<color rgba="0.1 0.1 0.9 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin rpy="0 0 0" xyz="0 0 0" />
+			<geometry>
+				<cylinder radius="0.04" length="0.017"/>
+			</geometry>
+		</collision>
+	</link>
+
 	<joint name="motoman_right_joint_pre_ee" type="fixed">
 		<parent link="arm_right_link_tool0"/>
+		<child link="robotiq_arg2f_extra_link"/>
+    <origin xyz="0 0 0.0085" rpy="0 0 1.5708" />
+	</joint>
+
+	<joint name="motoman_right_joint_ee_extra" type="fixed">
+		<parent link="robotiq_arg2f_extra_link"/>
 		<child link="robotiq_arg2f_base_link"/>
-		<origin xyz="0 0 0" rpy="0 0 1.5708" />
+		<origin xyz="0 0 0.0085" rpy="0 0 0" />
 	</joint>
 
 	<joint name="motoman_right_joint_ee" type="fixed">
