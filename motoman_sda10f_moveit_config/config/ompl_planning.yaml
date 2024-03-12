@@ -1,4 +1,18 @@
 planner_configs:
+  LazyPRMstarSave: # use this with a representative environment to create a roadmap
+    type: geometric::LazyPRMstar
+    multi_query_planning_enabled: true
+    store_planner_data: true
+    load_planner_data: false
+    planner_data_path: /tmp/roadmap.graph
+    maximum_waypoint_distance: 0.001
+  LazyPRMLoad: # use this to load a previously created roadmap
+    type: geometric::LazyPRM
+    multi_query_planning_enabled: true
+    store_planner_data: false
+    load_planner_data: true
+    planner_data_path: /tmp/roadmap.graph
+    maximum_waypoint_distance: 0.001
   AnytimePathShortening:
     type: geometric::AnytimePathShortening
     shortcut: true  # Attempt to shortcut all new solution paths
@@ -165,6 +179,8 @@ arm_left:
     - TRRT
     - PRM
     - PRMstar
+    - LazyPRMstarSave
+    - LazyPRMLoad
     - FMT
     - BFMT
     - PDST
@@ -193,6 +209,8 @@ arm_right:
     - TRRT
     - PRM
     - PRMstar
+    - LazyPRMstarSave
+    - LazyPRMLoad
     - FMT
     - BFMT
     - PDST
@@ -221,6 +239,8 @@ arms:
     - TRRT
     - PRM
     - PRMstar
+    - LazyPRMstarSave
+    - LazyPRMLoad
     - FMT
     - BFMT
     - PDST
@@ -249,6 +269,8 @@ robotiq_gripper:
     - TRRT
     - PRM
     - PRMstar
+    - LazyPRMstarSave
+    - LazyPRMLoad
     - FMT
     - BFMT
     - PDST
