@@ -9,6 +9,7 @@ for pkg in $(echo "
 	robotiq_3f_gripper_articulated_msgs
 	robotiq_3f_gripper_control
 	robotiq_3f_gripper_joint_state_publisher
+	robotiq_3f_gripper_msgs
 	robotiq_3f_gripper_visualization
 	robotiq_3f_rviz
 	robotiq_ethercat
