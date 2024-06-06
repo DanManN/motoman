@@ -173,7 +173,7 @@ void JointTrajectoryStreamer::jointCommandExCB(const motoman_msgs::DynamicJointT
 
   const size_t num_msg_points = msg->points.size();
 
-  motoman_msgs::DynamicJointsGroup rbt_pt;
+  // motoman_msgs::DynamicJointsGroup rbt_pt;
 
   //If current state is idle, set to POINT_STREAMING
   if (TransferStates::IDLE == state)
@@ -193,6 +193,7 @@ void JointTrajectoryStreamer::jointCommandExCB(const motoman_msgs::DynamicJointT
       // Get the message point and select
       const motoman_msgs::DynamicJointsGroup msg_pt = msg->points[0].groups[i];
 
+      /*
       if (!select(msg->joint_names, msg_pt, this->robot_groups_[msg_pt.group_number].get_joint_names(), &rbt_pt))
       {
         // Select function will report message to console, just return here to stay in IDLE state
@@ -200,13 +201,14 @@ void JointTrajectoryStreamer::jointCommandExCB(const motoman_msgs::DynamicJointT
       }
       else
       {
+      */
         // Check for required zero velocities
         const double zero_tolerance = 1e-5;
         bool zero_velocities = true;
 
-        for (size_t i = 0; i < rbt_pt.velocities.size(); ++i)
+        for (size_t i = 0; i < msg_pt.velocities.size(); ++i)
         {
-          if (std::abs(rbt_pt.velocities[i]) > zero_tolerance )
+          if (std::abs(msg_pt.velocities[i]) > zero_tolerance )
           {
             zero_velocities = false;
             break;
@@ -219,7 +221,7 @@ void JointTrajectoryStreamer::jointCommandExCB(const motoman_msgs::DynamicJointT
                     " unable to transition to on-the-fly streaming");
           return;
         }
-      }
+      //}
 
       if (msg_pt.time_from_start > max_time_from_start)
       {
