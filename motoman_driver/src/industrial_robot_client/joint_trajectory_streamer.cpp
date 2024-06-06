@@ -161,6 +161,195 @@ void JointTrajectoryStreamer::jointTrajectoryCB(const trajectory_msgs::JointTraj
   send_to_robot(new_traj_msgs);
 }
 
+void JointTrajectoryStreamer::jointCommandExCB(const motoman_msgs::DynamicJointTrajectoryConstPtr &msg)
+{
+  // read current state value (should be atomic)
+  int state = this->state_;
+
+  ROS_DEBUG("Current state is: %d", state);
+
+  // Point specific variables that can persist between IDLE and POINT_STREAM state
+  bool start_point = false;
+
+  const size_t num_msg_points = msg->points.size();
+
+  motoman_msgs::DynamicJointsGroup rbt_pt;
+
+  //If current state is idle, set to POINT_STREAMING
+  if (TransferStates::IDLE == state)
+  {
+    // Check to see if the message contains more than one trajectory point, currently the
+    // POINT_STREAMING state only accepts a single point
+    if (num_msg_points != 1)
+    {
+      ROS_ERROR("JointTrajectory command must contain a single point, ignoring message and maintaining IDLE state");
+      return;
+    }
+
+    ros::Duration max_time_from_start = ros::Duration(0);
+    int num_groups = msg->points[0].num_groups;
+    for (int i = 0; i < num_groups; i++) {
+
+      // Get the message point and select
+      const motoman_msgs::DynamicJointsGroup msg_pt = msg->points[0].groups[i];
+
+      if (!select(msg->joint_names, msg_pt, this->robot_groups_[msg_pt.group_number].get_joint_names(), &rbt_pt))
+      {
+        // Select function will report message to console, just return here to stay in IDLE state
+        return;
+      }
+      else
+      {
+        // Check for required zero velocities
+        const double zero_tolerance = 1e-5;
+        bool zero_velocities = true;
+
+        for (size_t i = 0; i < rbt_pt.velocities.size(); ++i)
+        {
+          if (std::abs(rbt_pt.velocities[i]) > zero_tolerance )
+          {
+            zero_velocities = false;
+            break;
+          }
+        }
+
+        if (!zero_velocities)
+        {
+          ROS_ERROR("Starting joint point must contain zero velocity for each joint,"
+                    " unable to transition to on-the-fly streaming");
+          return;
+        }
+      }
+
+      if (msg_pt.time_from_start > max_time_from_start)
+      {
+        max_time_from_start = msg_pt.time_from_start;
+      }
+    }
+
+    // Have a valid starting point, update the flag and the time from start variable
+    // Note: last_time_from_start_ variable is only used in this function therefore we do not need to wrap in lock
+    start_point = true;
+    ptstreaming_last_time_from_start_ = max_time_from_start;
+
+    // Update point streaming sequence count, empty the point queue and set internal state to point streaming
+    this->mutex_.lock();
+    this->state_ = TransferStates::POINT_STREAMING;
+    this->ptstreaming_seq_count_ = 0;
+    this->ptstreaming_queue_ = std::queue<SimpleMessage>();
+    this->mutex_.unlock();
+
+    // Set the local state to point streaming to force enqueuing of the starting point
+    state = TransferStates::POINT_STREAMING;
+
+    ROS_INFO("Starting joint point received. Starting on-the-fly streaming.");
+  }
+
+  // Process incoming point since we are in point streaming mode
+  if (TransferStates::POINT_STREAMING == state)
+  {
+    bool stop_trajectory = false;
+
+    ros::Duration pt_time_from_start;
+
+    // Empty points is a trigger to abort the POINT_STREAMING mode by stopping the trajectory
+    if (msg->points.empty())
+    {
+      ROS_INFO("Empty point received");
+      stop_trajectory = true;
+    }
+    else if (num_msg_points != 1)  // Check for invalid number of trajectory points
+    {
+      ROS_ERROR("JointTrajectory command must contain a single point");
+      stop_trajectory = true;
+    }
+    else  // We have at one point, let check for timing if we are not the start point
+    {
+      ros::Duration max_time_from_start = ros::Duration(0);
+      int num_groups = msg->points[0].num_groups;
+      for (int i = 0; i < num_groups; i++) {
+        pt_time_from_start = msg->points[0].groups[i].time_from_start;
+        if (!start_point && (pt_time_from_start <= ptstreaming_last_time_from_start_))
+        {
+          ROS_ERROR("JointTrajectory point must have a time from start duration that is greater than the previously "
+                    "processes point");
+          stop_trajectory = true;
+          break;
+        }
+        if (pt_time_from_start > max_time_from_start)
+        {
+          max_time_from_start = pt_time_from_start;
+        }
+      }
+      pt_time_from_start = max_time_from_start;
+    }
+
+    if (ptstreaming_queue_.size() > max_ptstreaming_queue_elements)  // Check for max queue size
+    {
+      ROS_ERROR("Point streaming queue has reached max allowed elements");
+      stop_trajectory = true;
+    }
+
+    // Stop the trajectory and cancel the point streaming mode if we need to
+    if (stop_trajectory)
+    {
+      ROS_INFO("Canceling on-the-fly streaming");
+      this->mutex_.lock();
+      trajectoryStop();
+      this->mutex_.unlock();
+      return;
+    }
+
+    /**
+    // select / reorder joints for sending to robot (if it is not the starting point)
+    if (!start_point)
+    {
+      if (!select(msg->joint_names, msg->points[0].groups[0], this->all_joint_names_, &rbt_pt))
+      {
+        return;
+      }
+    }
+
+    trajectory_msgs::JointTrajectoryPoint xform_pt;
+    // transform point data (e.g. for joint-coupling)
+    if (!transform(rbt_pt, &xform_pt))
+      return;
+
+    SimpleMessage message;
+    // convert trajectory point to ROS message
+    if (!create_message(this->ptstreaming_seq_count_, xform_pt, &message))
+      return;
+    **/
+
+    SimpleMessage message;
+    create_message_ex(this->ptstreaming_seq_count_, msg->points[0], &message);
+
+    // Update the last time from start
+    // Note: last_time_from_start_ variable is only used in this function therefore we do not need to wrap in lock
+    ptstreaming_last_time_from_start_ = pt_time_from_start;
+
+    // Points get pushed into queue here. They will be popped in the Streaming Thread and sent to controller.
+    this->mutex_.lock();
+    this->ptstreaming_queue_.push(message);
+    this->ptstreaming_seq_count_++;
+    this->mutex_.unlock();
+  }
+
+  //Else, cannot splice. Cancel current motion.
+  else
+  {
+    if (msg->points.empty())
+      ROS_INFO("Empty trajectory received, canceling current trajectory");
+    else
+      ROS_ERROR("Trajectory splicing not yet implemented, stopping current motion.");
+
+    this->mutex_.lock();
+    trajectoryStop();
+    this->mutex_.unlock();
+    return;
+  }
+}
+
 void JointTrajectoryStreamer::jointCommandCB(const trajectory_msgs::JointTrajectoryConstPtr &msg)
 {
   // read current state value (should be atomic)
