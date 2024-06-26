@@ -46,7 +46,4 @@
   <!-- <exec_depend>motoman_sia20d_support</exec_depend> -->
   <!-- <exec_depend>motoman_sia5d_support</exec_depend> -->
 
-  <export>
-    <metapackage/>
-  </export>
 </package>

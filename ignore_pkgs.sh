@@ -3,7 +3,6 @@ for pkg in $(echo "
 	robotiq_2f_140_gripper_visualization
 	robotiq_2f_c2_gripper_visualization
 	robotiq_2f_gripper_action_server
-	robotiq_2f_gripper_control
 	robotiq_3f_gripper_articulated_gazebo
 	robotiq_3f_gripper_articulated_gazebo_plugins
 	robotiq_3f_gripper_articulated_msgs

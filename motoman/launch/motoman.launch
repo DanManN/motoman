@@ -1,0 +1,32 @@
+<launch>
+
+  <arg name="robot_ip" default="motoman" />
+  <arg name="use_bswap" default="true" />
+  <arg name="version0" default="false" />
+  <arg name="robotiq_usb_port" default="/dev/ttyUSB1" />
+
+  <rosparam>
+  controller_joint_names: [arm_left_joint_1_s,arm_left_joint_2_l,arm_left_joint_3_e,arm_left_joint_4_u,arm_left_joint_5_r,arm_left_joint_6_b,arm_left_joint_7_t,arm_right_joint_1_s,arm_right_joint_2_l,arm_right_joint_3_e,arm_right_joint_4_u,arm_right_joint_5_r,arm_right_joint_6_b,arm_right_joint_7_t,torso_joint_b1,torso_joint_b2]
+  </rosparam>
+
+  <rosparam command="load" file="$(find motoman_sda10f_support)/config/sda10f_state_interface.yaml" />
+  <rosparam command="load" file="$(find motoman_sda10f_support)/config/sda10f_motion_interface.yaml" />
+  <rosparam command="load" file="$(find motoman_sda10f_support)/config/joint_names_sda10f.yaml" />
+
+  <!-- <param name="robot_description" textfile="$(find motoman_config)/updated_urdf/motoman_moveit.urdf" /> -->
+  <param name="robot_description" command="xacro  '$(find motoman_sda10f_support)/urdf/sda10f.xacro'" />
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" />
+
+  <include file="$(find motoman_driver)/launch/robot_interface_streaming_fs100.launch">
+    <arg name="robot_ip"   value="$(arg robot_ip)" />
+    <arg name="use_bswap"  value="$(arg use_bswap)" />
+    <arg name="version0"  value="$(arg version0)" />
+  </include>
+
+  <!-- gripper -->
+  <include file="$(find robotiq_2f_gripper_control)/launch/robotiq_action_server.launch">
+    <arg name="comport" value="$(arg robotiq_usb_port)"/>
+  </include>
+
+</launch>
