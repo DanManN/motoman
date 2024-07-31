@@ -30,6 +30,27 @@
         <joint name="arm_right_joint_6_b"/>
         <joint name="arm_right_joint_7_t"/>
     </group>
+    <group name="arm_left_bioik">
+        <joint name="torso_joint_b1"/>
+        <joint name="arm_left_joint_1_s"/>
+        <joint name="arm_left_joint_2_l"/>
+        <joint name="arm_left_joint_3_e"/>
+        <joint name="arm_left_joint_4_u"/>
+        <joint name="arm_left_joint_5_r"/>
+        <joint name="arm_left_joint_6_b"/>
+        <joint name="arm_left_joint_7_t"/>
+    </group>
+    <group name="arm_right_bioik">
+        <link name="motoman_right_ee"/>
+        <joint name="torso_joint_b1"/>
+        <joint name="arm_right_joint_1_s"/>
+        <joint name="arm_right_joint_2_l"/>
+        <joint name="arm_right_joint_3_e"/>
+        <joint name="arm_right_joint_4_u"/>
+        <joint name="arm_right_joint_5_r"/>
+        <joint name="arm_right_joint_6_b"/>
+        <joint name="arm_right_joint_7_t"/>
+    </group>
     <group name="arms">
         <joint name="torso_joint_b1"/>
         <joint name="arm_left_joint_1_s"/>

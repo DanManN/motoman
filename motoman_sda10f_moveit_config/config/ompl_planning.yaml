@@ -175,6 +175,70 @@ planner_configs:
     dense_delta_fraction: 0.001  # delta fraction for interface detection. default: 0.001
     max_failures: 5000  # maximum consecutive failure limit. default: 5000
     maximum_waypoint_distance: 0.004
+arm_left_bioik:
+  planner_configs:
+    - AnytimePathShortening
+    - SBL
+    - EST
+    - LBKPIECE
+    - BKPIECE
+    - KPIECE
+    - RRT
+    - RRTConnect
+    - RRTstar
+    - TRRT
+    - PRM
+    - PRMstar
+    - LazyPRMstarSave
+    - LazyPRMLoad
+    - FMT
+    - BFMT
+    - PDST
+    - STRIDE
+    - BiTRRT
+    - LBTRRT
+    - BiEST
+    - ProjEST
+    - LazyPRM
+    - LazyPRMstar
+    - LazyPRMSemiPers
+    - LazyPRMstarSemiPers
+    - SPARS
+    - SPARStwo
+  projection_evaluator: joints(torso_joint_b1,arm_left_joint_1_s)
+  longest_valid_segment_fraction: 0.01
+arm_right_bioik:
+  planner_configs:
+    - AnytimePathShortening
+    - SBL
+    - EST
+    - LBKPIECE
+    - BKPIECE
+    - KPIECE
+    - RRT
+    - RRTConnect
+    - RRTstar
+    - TRRT
+    - PRM
+    - PRMstar
+    - LazyPRMstarSave
+    - LazyPRMLoad
+    - FMT
+    - BFMT
+    - PDST
+    - STRIDE
+    - BiTRRT
+    - LBTRRT
+    - BiEST
+    - ProjEST
+    - LazyPRM
+    - LazyPRMstar
+    - LazyPRMSemiPers
+    - LazyPRMstarSemiPers
+    - SPARS
+    - SPARStwo
+  projection_evaluator: joints(torso_joint_b1,arm_right_joint_1_s)
+  longest_valid_segment_fraction: 0.01
 arm_left:
   planner_configs:
     - AnytimePathShortening
