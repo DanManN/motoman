@@ -70,8 +70,11 @@ class MotomanJointTrajectoryStreamer : public JointTrajectoryStreamer
 public:
   // since this class overrides some base-class methods,
   // these statements help find the base-class versions
+  using JointTrajectoryStreamer::run;
   using JointTrajectoryStreamer::init;
   using JointTrajectoryInterface::is_valid;
+
+  virtual void run();
 
   /**
    * \brief Default constructor

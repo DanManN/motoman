@@ -71,7 +71,10 @@ class JointTrajectoryStreamer : public JointTrajectoryInterface
 {
 public:
   // since this class defines a different init(), this helps find the base-class init()
+  using JointTrajectoryInterface::run;
   using JointTrajectoryInterface::init;
+
+  virtual void run();
 
   /**
    * \brief Default constructor

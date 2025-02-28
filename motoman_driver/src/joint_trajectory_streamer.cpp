@@ -39,6 +39,8 @@
 #include <vector>
 #include <string>
 
+#include "std_msgs/UInt32.h"
+
 namespace CommTypes = industrial::simple_message::CommTypes;
 namespace ReplyTypes = industrial::simple_message::ReplyTypes;
 using industrial::joint_data::JointData;
@@ -64,6 +66,23 @@ namespace
 }
 
 #define ROS_ERROR_RETURN(rtn, ...) do {ROS_ERROR(__VA_ARGS__); return(rtn);} while (0)  // NOLINT(whitespace/braces)
+
+void MotomanJointTrajectoryStreamer::run()
+{
+  /* ros::Publisher queue_size_pub = node_.advertise<std_msgs::UInt32>("robot_streaming_queue_size", 10); */
+  ros::Publisher queue_size_pub = node_.advertise<std_msgs::UInt32>("robot_transfer_state", 10);
+  ros::Rate loop_rate(100);
+  unsigned int val;
+  while (ros::ok()) {
+    /* val = this->ptstreaming_queue_.size(); */
+    val = this->state_;
+    std_msgs::UInt32 msg;
+    msg.data = val;
+    queue_size_pub.publish(msg);
+    ros::spinOnce();
+    loop_rate.sleep();
+  }
+}
 
 // override init() to read "robot_id" parameter and subscribe to joint_states
 bool MotomanJointTrajectoryStreamer::init(SmplMsgConnection* connection, const std::map<int, RobotGroup> &robot_groups,
