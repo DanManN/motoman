@@ -931,6 +931,7 @@
         <child link="camera_torso_link" />
         <origin rpy="0 0 0" xyz="0.1 0.0 0.2" />
     </joint>
+    <!--
     <link name="camera_arm_link">
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0" />
@@ -958,6 +959,7 @@
         <child link="camera_arm_link" />
         <origin rpy="0 0 0" xyz="0 0.05 0.1" />
     </joint>
+    -->
     <transmission name="trans_torso_joint_b1">
         <type>transmission_interface/SimpleTransmission</type>
         <joint name="torso_joint_b1">
