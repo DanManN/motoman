@@ -207,4 +207,6 @@
     <disable_collisions link1="arm_right_link_7_t" link2="robotiq_arg2f_extra_link" reason="User"/>
     <disable_collisions link1="arm_right_link_6_b" link2="robotiq_arg2f_extra_link" reason="User"/>
     <disable_collisions link1="robotiq_arg2f_base_link" link2="robotiq_arg2f_extra_link" reason="User"/>
+    <disable_collisions link1="robotiq_arg2f_base_link" link2="camera_arm_link" reason="User"/>
+    <disable_collisions link1="robotiq_arg2f_extra_link" link2="camera_arm_link" reason="User"/>
 </robot>
